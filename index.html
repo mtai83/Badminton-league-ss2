@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badminton League — Mùa 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF7E8;
+    --court:#1F4D43;
+    --court-deep:#143832;
+    --coral:#FF6B5B;
+    --mustard:#F4B942;
+    --leaf:#7FB97A;
+    --ink:#1B2E29;
+    --paper:#FFFCF5;
+    --line: rgba(31,77,67,0.18);
+    --shadow: 0 10px 24px rgba(20,56,50,0.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Nunito',sans-serif;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(127,185,122,0.18), transparent 35%),
+      radial-gradient(circle at 90% 10%, rgba(255,107,91,0.14), transparent 30%),
+      radial-gradient(circle at 80% 85%, rgba(244,185,66,0.16), transparent 35%);
+    pointer-events:none;
+    z-index:0;
+  }
+  h1,h2,h3,.display{
+    font-family:'Baloo 2', sans-serif;
+    margin:0;
+    color:var(--court-deep);
+  }
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:980px;
+    margin:0 auto;
+    padding:0 24px 80px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:90px 24px 70px;
+    text-align:center;
+    background:var(--court);
+    color:var(--paper);
+    overflow:hidden;
+    border-radius:0 0 48px 48px;
+    box-shadow: var(--shadow);
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height:18px;
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.18) 0 10px, transparent 10px 20px);
+  }
+  .net{
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 26px, rgba(255,255,255,0.06) 26px 27px),
+      repeating-linear-gradient(90deg, transparent 0 26px, rgba(255,255,255,0.06) 26px 27px);
+    opacity:0.6;
+  }
+  .shuttle{
+    font-size:46px;
+    display:inline-block;
+    animation: bounce 3.2s ease-in-out infinite;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+  }
+  @keyframes bounce{
+    0%,100%{ transform: translateY(0) rotate(-8deg); }
+    50%{ transform: translateY(-18px) rotate(10deg); }
+  }
+  .eyebrow{
+    position:relative; z-index:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:800;
+    font-size:13px;
+    color:var(--mustard);
+    margin-bottom:10px;
+  }
+  .hero h1{
+    position:relative; z-index:1;
+    color:#fff;
+    font-size:clamp(36px, 6vw, 58px);
+    line-height:1.05;
+  }
+  .hero h1 span{ color:var(--mustard); }
+  .hero p.sub{
+    position:relative; z-index:1;
+    max-width:540px;
+    margin:18px auto 0;
+    font-weight:600;
+    font-size:17px;
+    color:rgba(255,247,232,0.88);
+  }
+  .hero-meta{
+    position:relative; z-index:1;
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+    margin-top:30px;
+  }
+  .pill{
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.28);
+    color:#fff;
+    padding:9px 18px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:13.5px;
+    backdrop-filter: blur(2px);
+  }
+
+  /* ---------- SECTION SCAFFOLDING ---------- */
+  section{
+    margin-top:64px;
+  }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .sec-num{
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:15px;
+    color:var(--paper);
+    background:var(--coral);
+    border-radius:50%;
+    width:38px;height:38px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  }
+  .sec-head h2{
+    font-size:clamp(22px,3.2vw,30px);
+  }
+  .sec-sub{
+    color:#5a6e68;
+    font-weight:700;
+    font-size:14.5px;
+    margin:-14px 0 22px 52px;
+  }
+  .card{
+    background:var(--paper);
+    border-radius:22px;
+    padding:26px 28px;
+    box-shadow: var(--shadow);
+    border:1px solid var(--line);
+  }
+
+  /* ---------- TEAM DRAFT ---------- */
+  .draft-steps{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .draft-step{
+    background:var(--paper);
+    border-radius:16px;
+    padding:16px;
+    border:1px dashed var(--line);
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--court-deep);
+  }
+  .draft-step b{
+    display:block;
+    font-family:'Baloo 2',sans-serif;
+    font-size:13px;
+    color:var(--coral);
+    margin-bottom:4px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  .rank-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:6px;
+  }
+  .rank-table th{
+    text-align:left;
+    font-family:'Baloo 2',sans-serif;
+    color:var(--court-deep);
+    font-size:14px;
+    padding:8px 10px;
+    border-bottom:2px solid var(--court);
+  }
+  .rank-table td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--line);
+    font-weight:700;
+  }
+  .rank-table tr:last-child td{ border-bottom:none; }
+  .score-dot{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px;height:26px;border-radius:50%;
+    background:var(--mustard);
+    color:#fff; font-size:12.5px; font-weight:800;
+  }
+
+  .teams-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:16px;
+    margin-top:22px;
+  }
+  .team-card{
+    background:var(--court);
+    color:#fff;
+    border-radius:18px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: var(--shadow);
+  }
+  .team-card::before{
+    content:"";
+    position:absolute; right:-20px; top:-20px;
+    width:90px;height:90px;border-radius:50%;
+    background:rgba(255,255,255,0.08);
+  }
+  .team-card .tag{
+    font-family:'Baloo 2',sans-serif;
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--mustard);
+    font-weight:700;
+  }
+  .team-card h3{
+    color:#fff;
+    font-size:26px;
+    margin-top:4px;
+  }
+  .team-card .members{
+    margin-top:10px;
+    font-weight:700;
+    font-size:14px;
+    color:rgba(255,255,255,0.85);
+  }
+
+  /* ---------- COIN / SCORING ---------- */
+  .coin-row{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+  .coin-box{
+    flex:1;
+    min-width:200px;
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+    font-weight:800;
+    font-family:'Baloo 2',sans-serif;
+  }
+  .coin-box.win{ background:rgba(127,185,122,0.22); color:#27563b; }
+  .coin-box.lose{ background:rgba(255,107,91,0.16); color:#9c3324; }
+  .coin-box.start{ background:rgba(244,185,66,0.22); color:#7a5407; }
+  .coin-box .big{ display:block; font-size:30px; margin-top:6px; }
+
+  .stat-strip{
+    display:flex; gap:14px; flex-wrap:wrap; margin-top:18px;
+  }
+  .stat-strip div{
+    background:rgba(31,77,67,0.06);
+    border-radius:14px;
+    padding:12px 16px;
+    font-weight:700;
+    font-size:14px;
+    color:var(--court-deep);
+  }
+  .stat-strip strong{
+    font-family:'Baloo 2',sans-serif;
+    display:block;
+    font-size:20px;
+    color:var(--coral);
+  }
+
+  /* ---------- LUCKY CARDS ---------- */
+  .cards-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    gap:16px;
+  }
+  .lucky-card{
+    background:var(--paper);
+    border-radius:18px;
+    padding:18px 18px 20px;
+    border:1px solid var(--line);
+    box-shadow: var(--shadow);
+    transition: transform .2s ease, box-shadow .2s ease;
+    position:relative;
+  }
+  .lucky-card:hover{
+    transform: translateY(-5px) rotate(-1deg);
+    box-shadow: 0 16px 28px rgba(20,56,50,0.2);
+  }
+  .lucky-card .ico{
+    font-size:26px;
+    display:inline-block;
+    margin-bottom:8px;
+  }
+  .lucky-card h3{
+    font-size:17px;
+    margin-bottom:6px;
+  }
+  .lucky-card p{
+    margin:0;
+    font-size:13.8px;
+    font-weight:600;
+    color:#4d5f5a;
+  }
+  .lucky-card .corner{
+    position:absolute; top:14px; right:16px;
+    font-size:11px; font-weight:800;
+    color:var(--mustard);
+    letter-spacing:.06em;
+  }
+
+  /* ---------- BETTING / CHALLENGE ---------- */
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:720px){ .two-col{ grid-template-columns:1fr; } }
+  ul.rule-list{
+    margin:10px 0 0;
+    padding-left:0;
+    list-style:none;
+  }
+  ul.rule-list li{
+    position:relative;
+    padding:7px 0 7px 26px;
+    font-weight:700;
+    font-size:14.5px;
+    border-bottom:1px dashed var(--line);
+  }
+  ul.rule-list li:last-child{ border-bottom:none; }
+  ul.rule-list li::before{
+    content:"🏅";
+    position:absolute; left:0; top:6px;
+    font-size:13px;
+  }
+  .payout-row{
+    display:flex; justify-content:space-between;
+    padding:8px 0;
+    font-weight:800;
+    font-family:'Baloo 2',sans-serif;
+    font-size:15px;
+    border-bottom:1px solid var(--line);
+  }
+  .payout-row:last-child{ border-bottom:none; }
+  .payout-row span:last-child{ color:var(--coral); }
+
+  /* ---------- CHAMPION ---------- */
+  .champion{
+    text-align:center;
+    background: linear-gradient(160deg, var(--court) 0%, var(--court-deep) 100%);
+    color:#fff;
+    border-radius:26px;
+    padding:46px 28px;
+    position:relative;
+    overflow:hidden;
+  }
+  .champion::before{
+    content:"🏆";
+    position:absolute;
+    font-size:160px;
+    opacity:0.07;
+    right:-20px; top:-30px;
+  }
+  .champion h2{ color:#fff; font-size:clamp(24px,3.6vw,32px); }
+  .champion ol{
+    text-align:left;
+    max-width:480px;
+    margin:24px auto 0;
+    padding-left:22px;
+    font-weight:700;
+    color:rgba(255,255,255,0.92);
+  }
+  .champion ol li{ margin-bottom:10px; }
+  .tiebreak{
+    margin-top:18px;
+    display:inline-block;
+    background:rgba(244,185,66,0.16);
+    border:1px solid rgba(244,185,66,0.4);
+    color:var(--mustard);
+    padding:8px 16px;
+    border-radius:999px;
+    font-weight:800;
+    font-size:13px;
+  }
+
+  /* ---------- PRIZES / MVP ---------- */
+  .prize-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:14px;
+  }
+  .prize-card{
+    text-align:center;
+    background:var(--paper);
+    border-radius:16px;
+    padding:20px 10px;
+    border:1px solid var(--line);
+    font-weight:800;
+    font-family:'Baloo 2',sans-serif;
+  }
+  .prize-card .medal{ font-size:30px; display:block; margin-bottom:8px; }
+  .mvp-box{
+    margin-top:18px;
+    background:rgba(255,107,91,0.08);
+    border-radius:16px;
+    padding:18px 20px;
+    font-weight:700;
+    font-size:14.5px;
+    color:#7a342b;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:70px;
+    padding-bottom:20px;
+    font-weight:700;
+    color:#7a8e88;
+    font-size:13px;
+  }
+  footer .shuttle-foot{ font-size:18px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .shuttle{ animation:none; }
+    .lucky-card:hover{ transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="net"></div>
+  <div class="eyebrow">Rulebook</div>
+  <span class="shuttle">🏸</span>
+  <h1>Badminton League<br><span>Mùa 2</span></h1>
+  <p class="sub">8 người chơi, 4 đội, 18 trận, vô số Xu — và 10 lá bài định mệnh có thể đảo lộn cả mùa giải trong một pha cầu.</p>
+  <div class="hero-meta">
+    <span class="pill">👥 8 thành viên</span>
+    <span class="pill">⚔️ 4 đội</span>
+    <span class="pill">🔁 18 trận vòng tròn</span>
+    <span class="pill">🪙 Đơn vị: Xu</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. CHIA ĐỘI -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">1</span>
+      <h2>Chia đội — bỏ phiếu kín</h2>
+    </div>
+    <p class="sec-sub">Ai cũng đánh giá nhau, không ai biết lá phiếu của ai</p>
+    <div class="card">
+      <div class="draft-steps">
+        <div class="draft-step"><b>Bước 1</b>8 thành viên cùng tham gia chấm điểm</div>
+        <div class="draft-step"><b>Bước 2</b>Mỗi người điền phiếu kín, xếp hạng người chơi khác theo cảm nhận</div>
+        <div class="draft-step"><b>Bước 3</b>BTC thu phiếu, tính điểm trung bình</div>
+        <div class="draft-step"><b>Bước 4</b>Ghép đội theo nguyên tắc mạnh + yếu cân bằng</div>
+      </div>
+
+      <table class="rank-table">
+        <tr><th>Người chơi</th><th>Điểm xếp hạng</th></tr>
+        <tr><td>A</td><td><span class="score-dot">8</span></td></tr>
+        <tr><td>B</td><td><span class="score-dot">7</span></td></tr>
+        <tr><td>C</td><td><span class="score-dot">6</span></td></tr>
+        <tr><td>D</td><td><span class="score-dot">5</span></td></tr>
+        <tr><td>E</td><td><span class="score-dot">4</span></td></tr>
+        <tr><td>F</td><td><span class="score-dot">3</span></td></tr>
+        <tr><td>G</td><td><span class="score-dot">2</span></td></tr>
+        <tr><td>H</td><td><span class="score-dot">1</span></td></tr>
+      </table>
+
+      <div class="teams-grid">
+        <div class="team-card"><div class="tag">Đội 1</div><h3>A + H</h3><div class="members">Hạng 1 ghép hạng 8</div></div>
+        <div class="team-card"><div class="tag">Đội 2</div><h3>B + G</h3><div class="members">Hạng 2 ghép hạng 7</div></div>
+        <div class="team-card"><div class="tag">Đội 3</div><h3>C + F</h3><div class="members">Hạng 3 ghép hạng 6</div></div>
+        <div class="team-card"><div class="tag">Đội 4</div><h3>D + E</h3><div class="members">Hạng 4 ghép hạng 5</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. THỂ LỆ CHUNG -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">2</span>
+      <h2>Thể lệ chung & cách tính Xu</h2>
+    </div>
+    <p class="sec-sub">Vòng tròn một lượt — ai nhiều Xu nhất sẽ lên ngôi</p>
+    <div class="card">
+      <p style="font-weight:700; color:var(--court-deep); margin:0 0 6px;">Với 4 đội, mỗi cặp gặp nhau 3 lần → tổng 18 trận đấu chính thức.</p>
+      <div class="stat-strip">
+        <div><strong>4</strong>Đội thi đấu</div>
+        <div><strong>3</strong>Lượt gặp nhau / cặp đội</div>
+        <div><strong>18</strong>Tổng số trận</div>
+        <div><strong>10 Xu</strong>Vốn khởi điểm mỗi đội</div>
+      </div>
+
+      <div class="coin-row">
+        <div class="coin-box start">Khởi điểm<span class="big">10 Xu</span></div>
+        <div class="coin-box win">Thắng trận<span class="big">+15 Xu</span></div>
+        <div class="coin-box lose">Thua trận<span class="big">+5 Xu</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. LÁ ĐẶC BIỆT -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">3</span>
+      <h2>Lá Đặc Biệt — Lucky Cards</h2>
+    </div>
+    <p class="sec-sub">Trước mỗi vòng, BTC bốc ngẫu nhiên 1 trong 10 lá — hiệu ứng áp dụng cho trận đấu đó</p>
+    <div class="cards-grid">
+
+      <div class="lucky-card"><span class="corner">01</span><span class="ico">🌧️</span>
+        <h3>Thời tiết xấu</h3>
+        <p>Trận đấu kết thúc sớm khi một đội đạt 19 điểm.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">02</span><span class="ico">☀️</span>
+        <h3>Thời tiết đẹp</h3>
+        <p>Trận đấu kéo dài hơn, kết thúc khi một đội đạt 25 điểm.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">03</span><span class="ico">🎁</span>
+        <h3>Bonus</h3>
+        <p>Đội thắng nhận <b>+20 Xu</b> thay vì +15 Xu thông thường.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">04</span><span class="ico">🔥</span>
+        <h3>Chuỗi hủy diệt</h3>
+        <p>Đội ghi được 5 điểm liên tiếp được thưởng thêm +5 Xu.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">05</span><span class="ico">💪</span>
+        <h3>Áp đảo</h3>
+        <p>Thắng với cách biệt từ 6 điểm trở lên được thưởng +5 Xu.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">06</span><span class="ico">🔄</span>
+        <h3>Lội ngược dòng</h3>
+        <p>Đội đang bị dẫn, khi chạm mốc 10 điểm được cộng thêm 2 điểm.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">07</span><span class="ico">🪙</span>
+        <h3>Mua lợi thế</h3>
+        <p>Trước trận, mỗi đội có thể chi 5 Xu để nhận thêm 5 điểm khởi đầu.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">08</span><span class="ico">🎲</span>
+        <h3>All In</h3>
+        <p>Mỗi đội cược 0–10 Xu trước trận; thắng thì nhận lại toàn bộ số Xu đã cược.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">09</span><span class="ico">🤝</span>
+        <h3>Song hành</h3>
+        <p>Cả hai đội đều nhận thêm 3 Xu, bất kể thắng hay thua.</p>
+      </div>
+
+      <div class="lucky-card"><span class="corner">10</span><span class="ico">⚔️</span>
+        <h3>Tử chiến</h3>
+        <p>Đội thắng nhận thêm 8 Xu; đội thua không có Xu tham gia.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. ĐẶT CƯỢC & THÁCH ĐẤU -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">4</span>
+      <h2>Đặt cược & Thách đấu</h2>
+    </div>
+    <p class="sec-sub">Hai cách "chơi ngoài lề" để xoay chuyển bảng Xu</p>
+
+    <div class="two-col">
+      <div class="card">
+        <h3 style="font-size:18px; margin-bottom:6px;">🎯 Đặt cược chung cuộc</h3>
+        <ul class="rule-list">
+          <li>Mỗi đội dùng 3 Xu, đặt cược duy nhất 1 lần trong mùa</li>
+          <li>Dự đoán: đội Top 1, đội Top 4, và tổng Xu cuối cùng</li>
+          <li>Trúng cược khi đoán đúng đội & sai số Xu không quá ±40</li>
+        </ul>
+        <div style="margin-top:16px;">
+          <div class="payout-row"><span>🥇 Đoán đúng & nhanh nhất</span><span>+15 Xu</span></div>
+          <div class="payout-row"><span>🥈 Đúng thứ 2</span><span>+12 Xu</span></div>
+          <div class="payout-row"><span>🥉 Đúng thứ 3</span><span>+10 Xu</span></div>
+          <div class="payout-row"><span>🏅 Đúng thứ 4</span><span>+8 Xu</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:18px; margin-bottom:6px;">⚔️ Thách đấu</h3>
+        <ul class="rule-list">
+          <li>Mỗi đội có tối đa 2 lượt thách đấu trong mùa giải</li>
+          <li>Mỗi lần phát động thách đấu tốn 3 Xu</li>
+          <li>Đội bị thách đấu không có quyền từ chối</li>
+        </ul>
+        <div style="margin-top:16px;">
+          <div class="payout-row"><span>Thắng trận thách đấu</span><span>+6 Xu</span></div>
+          <div class="payout-row"><span>Thua trận thách đấu</span><span>+0 Xu</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. XÁC ĐỊNH NHÀ VÔ ĐỊCH -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">5</span>
+      <h2>Xác định Nhà Vô Địch</h2>
+    </div>
+    <p class="sec-sub">Mọi nguồn Xu được cộng dồn về một bảng tổng duy nhất</p>
+    <div class="champion">
+      <h2>🏆 Đội nhiều Xu nhất lên ngôi</h2>
+      <ol>
+        <li>Hoàn thành toàn bộ 18 trận đấu chính thức</li>
+        <li>Cộng / trừ Xu phát sinh từ các Lá Đặc Biệt</li>
+        <li>Cộng kết quả đặt cược chung cuộc</li>
+        <li>Cộng kết quả các trận thách đấu</li>
+      </ol>
+      <div class="tiebreak">⚖️ Bằng Xu? Đội thắng nhiều trận hơn sẽ xếp trên</div>
+    </div>
+  </section>
+
+  <!-- 6. GIẢI THƯỞNG & MVP -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">6</span>
+      <h2>Giải thưởng & MVP</h2>
+    </div>
+    <p class="sec-sub">4 đội, 4 giải — và một danh hiệu cá nhân được cả giải bình chọn</p>
+    <div class="card">
+      <div class="prize-grid">
+        <div class="prize-card"><span class="medal">🥇</span>Đội Top 1</div>
+        <div class="prize-card"><span class="medal">🥈</span>Đội Top 2</div>
+        <div class="prize-card"><span class="medal">🥉</span>Đội Top 3</div>
+        <div class="prize-card"><span class="medal">🏅</span>Đội Top 4</div>
+      </div>
+      <div class="mvp-box">
+        ⭐ <b>Giải MVP:</b> sau mỗi trận, mọi người bỏ phiếu chọn MVP của trận đó. Người có tổng số phiếu cao nhất sau toàn bộ 18 trận sẽ là MVP của giải.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <span class="shuttle-foot">🏸</span> Badminton League — Mùa 2 · Chơi vui, đánh thật, tính Xu sát sao
+  <span class="shuttle-foot">📢</span> Mọi khiếu nại xin gặp: Minh Tài & Thúy Nga (Quyết định của BTC là cuối cùng!!)
+</footer>
+
+</body>
+</html>
